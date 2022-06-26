@@ -51,17 +51,40 @@
           v-for="(RND, idx) in MD.rounds"
           :key="idx"
         >
-          <div v-if="RND.winning_team === 'Red'">
+          <div>
             <h2 class="text-red-400 font-bold">
-              {{ RND.end_type.slice(0, 1) }}
+              <span v-if="RND.end_type === 'Bomb defused'"
+                ><img
+                  class="invert h-6"
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABbUlEQVRoge2WP07DMBSHPxBSxMDWBakXQTCQjQW2zkicoCMSQztygF6AiYNQiRv0BHCEQjrBYiOTP02cPGMrvE+ylDr18/vpq/QKiqIoA1gBX8DM2ZuZvVWUjnpwCnzQHKQAptKXHkoXBB6A4z3vM+A+wL2iuDaajASxIm2kzYYlaStlG/uMiFuRNNLVhiVJK3U22oyIWpEy4mvDkpSVJhtdjIhZkTByQT8blgw4G9pEiIEYhdEEOQpc/wo4N88nIS8KHeQucP0fRvPT0iCpcSBQY8rvOfBE+1z5BG6dz6/Am0Avomyon+Du2kTrriNL2kPY9Ripx1Z8QiQbphxiCzwDO2dvZ/a2pe8uI/Rby4JqiEvzbgLkZk3MXk41zOIP+63lhmqIvMO5ujDXgXrsxBr/EJZymBfx7jwonEbmPc7PnfPFkEaGTvbMee4z0N4bankzmr8oGiQ1NEhqaJDU0CCpoUFSYzRBFEX5J3wDczOMznLhUksAAAAASUVORK5CYII="
+              /></span>
+              <span v-if="RND.end_type === 'Eliminated'">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  x="0px"
+                  y="0px"
+                  viewBox="0 0 26 26"
+                  style="fill: #000000"
+                  class="invert h-6 w-6"
+                >
+                  <path
+                    d="M 21.734375 19.640625 L 19.636719 21.734375 C 19.253906 22.121094 18.628906 22.121094 18.242188 21.734375 L 13 16.496094 L 7.761719 21.734375 C 7.375 22.121094 6.746094 22.121094 6.363281 21.734375 L 4.265625 19.640625 C 3.878906 19.253906 3.878906 18.628906 4.265625 18.242188 L 9.503906 13 L 4.265625 7.761719 C 3.882813 7.371094 3.882813 6.742188 4.265625 6.363281 L 6.363281 4.265625 C 6.746094 3.878906 7.375 3.878906 7.761719 4.265625 L 13 9.507813 L 18.242188 4.265625 C 18.628906 3.878906 19.257813 3.878906 19.636719 4.265625 L 21.734375 6.359375 C 22.121094 6.746094 22.121094 7.375 21.738281 7.761719 L 16.496094 13 L 21.734375 18.242188 C 22.121094 18.628906 22.121094 19.253906 21.734375 19.640625 Z"
+                  ></path></svg
+              ></span>
+              <span v-if="RND.end_type === 'Round timer expired'">
+                <img
+                  class="h-6 invert"
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAw0lEQVRIie2VTQ6CMBCFP01MVNY2XoYLcCR1qRfR8+hCYthwEXGBC8dQyZQqw8rwEjKlj3yvPxRgVESTQH89FG/aEzSYarpnE/OjM3hInSveQmplCSilpoqXtp7ppS3NMoSujSVgCVw64GeapeqtFXBV4AWwtsJDIV/DLecgdEh/lgNyXiPPW21nhfub/Ab6geZN3gmo5HO0TvrMr2khkEzxMvFuloBKIAkwA07AUdqJeHdLgP8xO3j3e8VX9f//g1E8AQJcRODxGex8AAAAAElFTkSuQmCC"
+                />
+              </span>
             </h2>
           </div>
-          <div v-else>
-            <h2 class="text-blue-400 font-bold">
-              {{ RND.end_type.slice(0, 1) }}
-            </h2>
-          </div>
-          <p>{{ idx + 1 }}</p>
+          <p v-if="RND.winning_team === 'Red'">
+            <span class="text-red-400">{{ idx + 1 }}</span>
+          </p>
+          <p v-if="RND.winning_team === 'Blue'">
+            <span class="text-blue-400">{{ idx + 1 }}</span>
+          </p>
         </div>
       </div>
       <p class="text-sm text-gray-100 text-opacity-60">Rounds</p>
@@ -79,7 +102,7 @@
           v-if="Team.length === 5"
         >
           <tr class="bg-blue-300 bg-opacity-25">
-            <th class="p-1px pl-1 cursor-default text-left text-blue-300">
+            <th :class="idx.toUpperCase()=='BLUE'?'pl-1 cursor-default text-left text-blue-300':'pl-1 cursor-default text-left text-red-300'">
               Team {{ idx.toUpperCase() }}
             </th>
             <th class="cursor-default"><abbr title="Rank Tier">Rank</abbr></th>
@@ -186,7 +209,10 @@
                     </div>
                   </div>
                   <router-link
-                  :to="{ name: 'Overview', params: { Name: Plyr.name,Tag:Plyr.tag }}"
+                    :to="{
+                      name: 'Overview',
+                      params: { Name: Plyr.name, Tag: Plyr.tag },
+                    }"
                     class="text-sm bg-blue-500 bg-opacity-10 hover:bg-opacity-20 rounded p-2"
                   >
                     View Profile
@@ -194,8 +220,12 @@
                 </div>
                 <!-- Avg Score K/D/A | Medal earned Danage /round -->
                 <div>
-                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-12 items-center py-2">
-                    <div class="flex gap-2 sm:gap-6 justify-between sm:justify-start w-full">
+                  <div
+                    class="flex flex-col sm:flex-row gap-2 sm:gap-12 items-center py-2"
+                  >
+                    <div
+                      class="flex gap-2 sm:gap-6 justify-between sm:justify-start w-full"
+                    >
                       <div>
                         <h2>Avg. Score</h2>
                         <p>
@@ -249,7 +279,9 @@
               </div>
               <!-- Rounds -->
               <div class="py-2 cursor-default">
-                <div class="flex flex-wrap gap-y-8 items-end justify-center pb-6">
+                <div
+                  class="flex flex-wrap gap-y-8 items-end justify-center pb-6"
+                >
                   <div
                     class="flex flex-col items-center relative"
                     v-for="(Pl, idx) in FilterStats(Plyr.puuid)"

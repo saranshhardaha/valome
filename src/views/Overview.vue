@@ -1,53 +1,49 @@
 <template>
   <main class="flex p-0 md:p-4 w-full min-h-screen">
-    <div class="flex flex-col w-full" v-if="visible">
+    <div class="relative flex flex-col w-full" v-if="visible">
       <!-- Profile Information -->
-      <div class="flex flex-col w-full">
+      <div class="flex flex-col w-full h-32">
         <div
-          class="relative flex flex-col justify-end z-10 text-white bg-opacity-50 w-full"
+          class="relative flex flex-col justify-end z-10 text-white bg-opacity-50 h-32 w-full"
         >
           <img
-            class="relative md:rounded-md h-52 object-cover w-full z-0"
+            class="absolute top-0 md:rounded-md h-32 object-cover w-full z-0"
             :src="Account.card.wide"
             alt=""
           />
-          <div
-            class="absolute w-full md:rounded-md fade z-10 p-4 md:px-6 md:py-4"
-          >
+          <div class="absolute bottom-2 p-4 w-full z-10">
             <div
-              class="font-bold flex flex-row gap-4 w-full justify-between md:justify-start items-center"
+              class="font-bold flex flex-row gap-4 w-full justify-start items-center"
             >
               <img
-                class="rounded-full h-20 ring-2 ring-white"
+                class="rounded-full h-10 ring-2 ring-white"
                 :src="Account.card.small"
                 alt=""
               />
-              <div class="flex flex-col items-start">
+              <div class="flex flex-col items-start text-sm">
                 <h2>
                   {{ Account.name }}
-                  <span
-                    class="text-sm px-1 bg-black bg-opacity-40 ml-1 rounded"
-                  >
+                  <span class="text-sm px-1 bg-black bg-opacity-40 rounded">
                     #{{ Account.tag }}
                   </span>
                 </h2>
-                <p class="text-emerald-200 text-sm">
-                  {{ Account.last_update }}
-                </p>
+                <h2
+                  class="text-xs bg-teal-400 px-2 bg-opacity-20 rounded"
+                >
+                  Lvl. {{ Account.account_level }}
+                </h2>
               </div>
-              <h2
-                class="ring-1 ring-teal-300 ring-opacity-60 bg-teal-400 px-2 bg-opacity-20 rounded"
-              >
-                Lvl. {{ Account.account_level }}
-              </h2>
             </div>
             <div class="flex justify-between"></div>
           </div>
         </div>
       </div>
-      <div class="flex p-4 px-0 flex-col md:flex-row py-2 gap-2 md:gap-2">
+      <div class="flex flex-col md:flex-row p-4 px-2 gap-4">
         <!-- Side Other Info -->
-        <div class="flex flex-col items-start w-full md:w-80 space-y-2.5" v-if="MMR">
+        <div
+          class="flex flex-col items-start w-full md:w-80 space-y-2.5"
+          v-if="MMR"
+        >
           <div class="rounded bg-slate-700/50 p-4 flex flex-col gap-4 w-full">
             <div class="flex justify-between items-center">
               <div class="text-left">
@@ -60,12 +56,18 @@
                   ></progress
                   >{{ MMR.current_data.ranking_in_tier }}/100</span
                 >
-                <div class="flex gap-2">
-                  <h2>Last Match Rating:</h2>
-                  <p>
-                    <span class="font-bold">{{
-                      MMR.current_data.mmr_change_to_last_game
-                    }}</span>
+                <div class="mt-2 flex gap-2 items-center justify-between">
+                  <h2 class="text-sm">Last Match:</h2>
+                  <p class="text-sm">
+                    <span
+                      v-if="MMR.current_data.mmr_change_to_last_game < 0"
+                      class="text-red-300"
+                    >
+                      {{ MMR.current_data.mmr_change_to_last_game }}RR
+                    </span>
+                    <span v-else
+                      >{{ MMR.current_data.mmr_change_to_last_game }}RR
+                    </span>
                   </p>
                 </div>
               </div>
@@ -81,7 +83,9 @@
               </div>
             </div>
           </div>
-          <div class="bg-slate-700/50 p-2 hidden rounded md:flex flex-col w-full">
+          <div
+            class="bg-slate-700/50 p-2 hidden rounded md:flex flex-col w-full"
+          >
             <div v-for="(season, key) in MMR.by_season" :key="key">
               <div
                 v-if="season.number_of_games > 0"
@@ -115,7 +119,7 @@
           </div>
         </div>
         <!-- Right Section [Matches] -->
-        <div class="py-0 w-full flex flex-col gap-2">
+        <div class="w-full flex flex-col gap-2">
           <!-- Select Type of Matches -->
           <div class="flex gap-2 flex-wrap md:gap-4 text-xs md:text-base">
             <a
@@ -156,18 +160,22 @@
             <h2 class="text-lg py-2 font-bold">Last Matches</h2>
             <div class="w-full flex flex-col gap-2">
               <div
-                class="w-full relative h-24 md:h-32 rounded"
+                class="w-full relative h-24 rounded"
                 v-for="(MM, idx) in MMRHistory"
                 :key="idx"
               >
                 <router-link
-                  class="w-full rounded-md absolute z-10 hover:bg-opacity-60 bg-opacity-10 bg-gradient-to-r from-slate-800 via-slate-800/90 to-slate-800/60 h-24 md:h-32 flex px-4 md:px-8 justify-between items-center"
+                  :class="
+                    Plyr[idx].isWon
+                      ? 'w-full rounded-md absolute z-10 hover:bg-opacity-60 bg-opacity-10 h-24 flex px-4 justify-between items-center bg-gradient-to-r from-slate-700 via-slate-700/80 to-green-300/30'
+                      : 'w-full rounded-md absolute z-10 hover:bg-opacity-60 bg-opacity-10 h-24 flex px-4 justify-between items-center bg-gradient-to-r from-slate-700 via-slate-700/80 to-red-300/30'
+                  "
                   :to="'/stats/' + MM.metadata.matchid"
                 >
-                  <div class="flex gap-2 md:gap-8">
+                  <div class="flex gap-4">
                     <img
                       :src="Plyr[idx].assets.agent.small"
-                      class="rounded hidden md:block h-12 w-12 md:h-16 md:w-16"
+                      class="rounded hidden md:block h-14 w-14"
                       alt=""
                     />
                     <div class="text-left flex flex-col gap-2">
@@ -176,7 +184,7 @@
                         <span
                           class="text-xs text-opacity-80 text-white bg-black rounded-full px-2 py-1 bg-opacity-10"
                         >
-                          {{ TimeConv(MM.metadata.game_start).split(", ")[1] }}
+                          {{ TimeConv(MM.metadata.game_start) }}
                         </span>
                       </h2>
                       <div class="flex gap-2 items-center">
@@ -232,7 +240,7 @@
                 </router-link>
                 <img
                   :src="MapIcon(MM.metadata.map)"
-                  class="absolute rounded-md z-0 h-24 md:h-32 w-full object-cover"
+                  class="absolute rounded-md z-0 h-24 w-full opacity-50 object-cover"
                   alt=""
                 />
               </div>
@@ -329,8 +337,11 @@ export default {
     let PlyrMD = (puuid) => {
       MMRHistory.value.forEach((e) => {
         let rounds_played = e.metadata.rounds_played;
+        let isRedWon = e.teams.red.has_won;
+        let isWon = false;
         e.players.all_players.forEach((ele) => {
           if (ele.puuid === puuid) {
+            if (ele.team == "Red" && isRedWon) isWon = true;
             Plyr.value.push({
               assets: ele.assets,
               Character: ele.character,
@@ -338,6 +349,7 @@ export default {
               currenttier: ele.currenttier,
               damage: ele.damage_made,
               rounds_played: rounds_played,
+              isWon: isWon,
             });
           }
         });
@@ -369,7 +381,6 @@ export default {
       await getMMR();
       await getMMRHistory();
       if (MMR.value && MMRHistory.value) visible.value = true;
-      console.log(MMR.value, MMRHistory.value, visible.value);
     };
 
     let getMMRHistory = async () => {
@@ -395,7 +406,10 @@ export default {
 
     let TimeConv = (Tm) => {
       var d = new Date(Tm * 1000);
-      d = d.toLocaleString();
+      d = d.toLocaleTimeString(navigator.language, {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
       return d;
     };
 
