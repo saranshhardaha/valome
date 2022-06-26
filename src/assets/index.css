@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.fade {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1),
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0)
+  );
+}
+progress {
+  border-radius: 20px;
+  height: 4px;
+}
+progress::-webkit-progress-bar {
+  border-radius: 20px;
+  height: 4px;
+}
+progress::-webkit-progress-value {
+  border-radius: 20px;
+  height: 4px;
+}
+progress::-moz-progress-bar {
+  border-radius: 20px;
+  height: 4px;
+}
+table {
+  /* border-collapse: collapse; */
+}
+@media only screen and (min-width: 540px) {
+  th,
+  td {
+    padding: 0.2rem 1rem;
+    /* border-bottom: #000 solid 1px; */
+  }
+}
+abbr {
+  border: none;
+  text-decoration: none !important;
+}
