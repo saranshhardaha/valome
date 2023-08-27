@@ -3,7 +3,7 @@
     class="bg-white/5 flex items-center justify-between gap-2 flex-start w-full h-12 px-4 "
   >
     <div class="grid place-items-center">
-      <router-link :to="{ name: 'Home' }"> vME </router-link>
+      <router-link :to="{ name: 'Home' }"> ValRun </router-link>
     </div>
     <div>
       <a href="/" id="Menu" class="text-white/50">

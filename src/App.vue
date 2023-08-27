@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen w-full  bg-black">
-    <Nav />
+    <TopNavigation />
     <div class="flex w-full h-full">
       <router-view />
     </div>
@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import Nav from "./components/Nav.vue";
+import TopNavigation from "./components/TopNavigation.vue";
 
 export default {
   components: {
-    Nav,
+    TopNavigation,
   },
 };
 </script>

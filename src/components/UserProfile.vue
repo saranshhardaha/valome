@@ -43,7 +43,7 @@
 const ValorantAPI = require("unofficial-valorant-api");
 import { ref } from "vue";
 export default {
-  name: "Stats",
+  name: "UserProfile",
   props: {
     userID: String,
   },

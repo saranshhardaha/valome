@@ -273,11 +273,13 @@ export default {
     let PlyrMD = (puuid) => {
       MMRHistory.value.forEach((e) => {
         let rounds_played = e.metadata.rounds_played;
-        let isRedWon = e.teams.red.has_won;
         let isWon = false;
         e.players.all_players.forEach((ele) => {
           if (ele.puuid === puuid) {
-            if (ele.team == "Red" && isRedWon) isWon = true;
+            if (ele.team == "Red")
+              isWon = e.teams.red.has_won;
+            else(ele.team == "Blue")
+              isWon = e.teams.blue.has_won;
             Plyr.value.push({
               assets: ele.assets,
               Character: ele.character,
@@ -328,6 +330,7 @@ export default {
         "competitive"
       );
       MMRHistory.value = MMH.data;
+      console.log(MMRHistory.value)
       PlyrMD(puuid);
     };
 

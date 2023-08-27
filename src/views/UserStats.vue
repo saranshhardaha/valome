@@ -315,7 +315,7 @@ import { useRoute, onBeforeRouteUpdate } from "vue-router";
 import { ref } from "vue";
 
 export default {
-  name: "Stats",
+  name: "UserStats",
   setup() {
     const route = useRoute();
     const MD = ref(0);

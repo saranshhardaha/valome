@@ -4,9 +4,9 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("../views/Home.vue"),
+    component: () => import("../views/AppHome.vue"),
     meta: {
-      title: "ValoMe - Get your stats & more!",
+      title: "ValoRun - Get your stats & more!",
       metaTags: [
         {
           name: "description",
@@ -24,12 +24,12 @@ const routes = [
   {
     path: "/profile/:Name/:Tag",
     name: "Overview",
-    component: () => import("../views/Overview.vue"),
+    component: () => import("../views/UserOverview.vue"),
   },
   {
     path: "/stats/:MatchID",
     name: "Stats",
-    component: () => import("../views/Stats.vue"),
+    component: () => import("../views/UserStats.vue"),
   },
 ];
 
